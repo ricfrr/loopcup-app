@@ -3,7 +3,14 @@ import { StyleSheet, View, Image, Text } from "react-native";
 import { Grid, Col } from "native-base";
 
 export default class CupState extends Component {
+  constructor(props){
+    super(props)
+  }
   render() {
+    var message = "Not Paired"
+    if (this.props.num_cup>0){
+      message = this.props.num_cup + " cup paired"
+    }
     return (
       <Grid >
         <Col size={40} >
@@ -17,7 +24,7 @@ export default class CupState extends Component {
           
         </Col>
         <Col size={60}>
-          <Text style={styles.text2}>Not Paired</Text>
+    <Text style={styles.text2}>{message}</Text>
         </Col>
       </Grid>
     );

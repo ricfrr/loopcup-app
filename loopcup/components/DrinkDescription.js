@@ -2,16 +2,47 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
 import { Button, Grid, Col, Row } from "native-base";
 import { withNavigation } from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
+import { ToastAndroid } from 'react-native';
+
 
 class DrinkDescription extends Component {
     constructor(props) {
         super(props)
-
+        this.state = {
+            base_url: 'http://192.168.1.4:5000/',
+            drink_id: this.props.navigation.getParam('drink_id')
+        }
     }
+
+    async buy() {
+        var url = this.state.base_url + 'drink/buy';
+        var id = await AsyncStorage.getItem('id');
+        console.log(url)
+        console.log(this.state.drink_id)
+        await fetch(url, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ profile_id: id, drink_id: this.state.drink_id })
+        }).then(async response => {
+            if (response.status === 200) {
+                this.props.navigation.goBack()
+            } else {
+                ToastAndroid.show('Problem! Try to check your credit', ToastAndroid.SHORT);
+                ToastAndroid.showWithGravity(
+                    'All Your Base Are Belong To Us',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER,
+                );
+            }
+        });
+    }
+
     render() {
 
-        console.log("rendering");
-        console.log(this.props.navigation.getParam('drink_image'))
         return (
             <Grid >
                 <Row size={30} >
@@ -44,7 +75,7 @@ class DrinkDescription extends Component {
 
                     <Col size={50}>
                         <Row size={30}>
-                            <Text style={styles.text_cash}> Lc 135.42</Text>
+                            <Text style={styles.text_cash}> Lc {this.props.navigation.getParam('loop_coins')}</Text>
                         </Row>
                         <Row size={30}>
                             <Text style={styles.text_cash}> Lc {this.props.navigation.getParam('drink_cost')}</Text>
@@ -53,7 +84,7 @@ class DrinkDescription extends Component {
                             <View style={styles.lineStyleRight} />
                         </Row>
                         <Row size={28}>
-                            <Text style={styles.text_cash}> Lc {(135.42 - parseFloat(this.props.navigation.getParam('drink_cost'))).toFixed(2)}</Text>
+                            <Text style={styles.text_cash}> Lc {(parseFloat(this.props.navigation.getParam('loop_coins')) - parseFloat(this.props.navigation.getParam('drink_cost'))).toFixed(2)}</Text>
                         </Row>
                     </Col>
 
@@ -61,7 +92,7 @@ class DrinkDescription extends Component {
                 <Row size={10}>
                     <View style={{ width: '100%', alignItems: 'center' }}>
                         <Button style={styles.buttonPay}>
-                            <Text style={styles.textBuyButton}>PAY</Text>
+                            <Text style={styles.textBuyButton} onPress={() => { this.buy() }}>PAY</Text>
                         </Button>
                     </View>
 

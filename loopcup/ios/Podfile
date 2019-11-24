@@ -40,6 +40,8 @@ target 'loopcup' do
 
   pod 'RNScreens', :path => '../node_modules/react-native-screens'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'loopcupTests' do
     inherit! :search_paths
     # Pods for testing

@@ -19,7 +19,9 @@ class DrinkComponent extends Component {
       drink_name: props.drink_name,
       drink_id: props.drink_id,
       drink_cost: props.drink_cost,
-      drink_image: props.drink_image
+      drink_image: props.drink_image, 
+      drink_descr: props.drink_descr,
+      loop_coins: props.loop_coins,
     }
   }
 
@@ -29,8 +31,10 @@ class DrinkComponent extends Component {
       <TouchableOpacity style={[styles.container]} onPress={()=> this.props.navigation.navigate('Shop', {
         drink_name: this.state.drink_name,
         drink_image: this.state.drink_image,
+        drink_id: this.state.drink_id,
         drink_cost: this.state.drink_cost, 
-        drink_descr: 'Traditionally, a mojito is a cocktail that consists of five ingredients: white rum, sugar (traditionally sugar cane juice), lime juice, soda water, and mint.[1][2] Its combination of sweetness, citrus, and herbaceous mint flavors is intended to complement the rum, and has made the mojito a popular summer drink.',
+        drink_descr: this.state.drink_descr,
+        loop_coins: this.state.loop_coins,
       })}>
         <Grid>
           <Col size={15}>

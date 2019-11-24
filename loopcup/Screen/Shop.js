@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, View, ScrollView, Text } from "react-native";
 import UserTopInfo from "../components/UserTopInfo";
-import CupState from "../components/CupState";
 import DrinkDescription from "../components/DrinkDescription";
 import { Grid, Row, Col } from "native-base";
+import UserTopInfoBack from "../components/UserTopInfoBack";
 
 export default class Shop extends Component {
 
@@ -14,10 +14,10 @@ export default class Shop extends Component {
     return (
       <Grid style={{ backgroundColor: "rgba(20,19,19,1)" }}>
         <Row size={10}>
-          <UserTopInfo />
+          <UserTopInfoBack/>
         </Row>
         <Row size={90}>
-          <DrinkDescription/>
+          <DrinkDescription />
         </Row>
         
 
@@ -27,6 +27,3 @@ export default class Shop extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  
-});

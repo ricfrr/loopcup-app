@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">loopcup</string>
+    <string name="facebook_app_id">423356491665108</string>
+    <string name="fb_login_protocol_scheme">fb423356491665108</string>
 </resources>

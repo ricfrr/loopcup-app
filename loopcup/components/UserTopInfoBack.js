@@ -2,17 +2,16 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
 import Svg, { Ellipse } from "react-native-svg";
 import { Grid, Col, Row } from "native-base";
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { withNavigation } from 'react-navigation';
 import AsyncStorage from "@react-native-community/async-storage";
 
 
-class UserTopInfo extends Component {
+class UserTopInfoBack extends Component {
   constructor(props){
     super(props)
     this.state = {
-      token: null, 
-      loop_coins: props.loop_coins  
+      token: null
     }
     this.get_url_pic()
   }
@@ -29,14 +28,12 @@ class UserTopInfo extends Component {
       <Grid>
         <Col size={80}>
           <Row >
-    <Text style={styles.text}>Lc {this.state.loop_coins}</Text>
-            <Icon name="plus" size={35} style={styles.topUpIcon} onPress={()=> this.props.navigation.navigate('TopUp')}/> 
+            <Icon name="md-arrow-back" size={40} style={styles.topUpIcon} onPress={()=> this.props.navigation.goBack()}/> 
           </Row>
         </Col>
         <Col size={20} style={{ height: '100%', alignContent: 'center' }}>
           <View style={{ marginTop: 20, height: '100%', alignItems: 'center', alignSelf: 'center', alignContent: 'center' }}>
-            <Image style={styles.image} source={{ uri: "https://graph.facebook.com/me/picture?access_token="+this.state.token }} />
-
+            <Image style={styles.image} source={{ uri:  "https://graph.facebook.com/me/picture?access_token="+this.state.token }} />
           </View>
         </Col>
       </Grid>
@@ -68,9 +65,10 @@ const styles = StyleSheet.create({
   },
   topUpIcon: {
     color: "rgba(255,255,255,1)",
-    textAlignVertical :'center'
+    textAlignVertical :'center', 
+    marginLeft: '5%'
   }
 });
 
 
-export default withNavigation(UserTopInfo)
+export default withNavigation(UserTopInfoBack)
