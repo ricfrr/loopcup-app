@@ -11,6 +11,7 @@ import Svg, { Ellipse } from "react-native-svg";
 import { Grid, Col } from "native-base";
 import { withNavigation } from 'react-navigation';
 
+
 class DrinkComponent extends Component {
 
   constructor(props) {
@@ -21,6 +22,7 @@ class DrinkComponent extends Component {
       drink_cost: props.drink_cost,
       drink_image: props.drink_image, 
       drink_descr: props.drink_descr,
+      cup_paired: props.cup_paired,
       loop_coins: props.loop_coins,
     }
   }
@@ -34,6 +36,7 @@ class DrinkComponent extends Component {
         drink_id: this.state.drink_id,
         drink_cost: this.state.drink_cost, 
         drink_descr: this.state.drink_descr,
+        cup_paired: this.state.cup_paired,
         loop_coins: this.state.loop_coins,
       })}>
         <Grid>

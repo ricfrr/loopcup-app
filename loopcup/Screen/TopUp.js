@@ -1,21 +1,52 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Text } from "react-native";
+import { StyleSheet, View, Image, Text, Modal,ToastAndroid } from "react-native";
 import { Grid, Row, Col, Button, Input } from "native-base";
 import { withNavigation } from 'react-navigation';
 import UserTopInfoBack from "../components/UserTopInfoBack";
+import Icon from 'react-native-vector-icons/Entypo';
+import AsyncStorage from '@react-native-community/async-storage';
+import WebView from 'react-native-webview'
+
 
 class TopUp extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      amount : "0"
+      amount: "0",
+      showModal: false,
+      base_url: 'http://192.168.1.4:5000/',
+      k: 0 // the number of title wrong
     }
   }
+
+  handleResponse(data) {
+    console.log(data);
+    if ((data.title.charAt(0) >= 0 && data.title.charAt(0) <= 9) && data.title != "") {
+      console.log("DONE");
+      this.setState({ showModal: false });
+      this.props.navigation.goBack();
+      this.setState({ k: 0 });
+    } else if (data.title.charAt(0) >= 0 || data.title.charAt(0) <= 9) {
+      this.setState({ k: 1 });
+    }
+    //
+  };
 
   render() {
     return (
       <Grid style={{ backgroundColor: "rgba(20,19,19,1)" }}>
+        <Modal
+              visible={this.state.showModal}
+              onRequestClose={() => this.setState({ showModal: false })}
+            >
+              <WebView
+                source={{ uri: this.state.base_url + "profile/pay/" + this.state.id + "/" + this.state.amount }}
+                onNavigationStateChange={(data) =>
+                  this.handleResponse(data)
+                }
+              />
+            </Modal>
         <Row size={10}>
           <UserTopInfoBack />
         </Row>
@@ -31,21 +62,30 @@ class TopUp extends Component {
               value={this.state.amount}
             />
             <Text style={styles.euroText}> €</Text>
-            
+
           </View>
 
         </Row>
         <Row size={40}>
           <View style={{ width: '100%', alignItems: 'center' }}>
             <Text style={styles.ratioText}> 1€ = 10Lc</Text>
-            <Button style={styles.buttonPay} onPress={() => this.props.navigation.navigate('Home')}>
-              <Text style={styles.textBuyButton}>Top Up</Text>
+            <Button style={styles.buttonPay} onPress={async () => {
+              //this.setState({amount: this.state.amount.slice(0,this.state.amount.length-1)})
+              if (!isNaN(this.state.amount)) {
+                _id = await AsyncStorage.getItem('id');
+                this.setState({ showModal: !this.showModal })
+                this.setState({ id: _id })
+              } else {
+                ToastAndroid.show('the amount has to be a number!', ToastAndroid.SHORT);
+              }
+            }}>
+              <Text style={styles.textBuyButton}>Pay with Paypal   <Icon size={20} color="black" name="paypal" /></Text>
             </Button>
+            
           </View>
 
         </Row>
       </Grid>
-
     );
   }
 }
@@ -69,7 +109,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
 
   },
-  amountText:{
+  amountText: {
     color: "rgba(255,255,255,1)",
     fontSize: 50,
     fontFamily: "roboto-regular",
@@ -78,7 +118,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'bottom',
     textAlign: 'center'
   },
-  euroText:{
+  euroText: {
     color: "rgba(255,255,255,1)",
     fontSize: 50,
     fontFamily: "roboto-regular",

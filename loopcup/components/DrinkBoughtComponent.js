@@ -10,13 +10,14 @@ import {
 } from "react-native";
 import { Grid, Col } from "native-base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import Dialog, { SlideAnimation, DialogContent } from 'react-native-popup-dialog';
+import { withNavigation } from 'react-navigation';
+import { ToastAndroid } from 'react-native';
+
 
 //import QRCode from 'react-native-qrcode'
-import QRCode from 'react-native-qrcode-svg';
 
 
-export default class DrinkBoughtComponent extends Component {
+class DrinkBoughtComponent extends Component {
 
 
     constructor(props) {
@@ -26,7 +27,7 @@ export default class DrinkBoughtComponent extends Component {
             drink_id: props.drink_id,
             drink_cost: props.drink_cost,
             drink_image: props.drink_image,
-            show: false,
+            cup_paired: props.cup_paired,
             unlocking: true,
             succes: false
         }
@@ -37,7 +38,18 @@ export default class DrinkBoughtComponent extends Component {
     render() {
         return (
 
-            <TouchableOpacity style={[styles.container]} onPress={() => this.setState({ show: true })}>
+            <TouchableOpacity style={[styles.container]} onPress={() => {
+                if (this.state.cup_paired != 0) {
+                    this.props.navigation.navigate('ShowDrink', {
+                        drink_id: this.state.drink_id,
+                        drink_name: this.state.drink_name,
+                    })
+                } else {
+                    ToastAndroid.show('Problem! Pair you cup before', ToastAndroid.SHORT);
+                    
+                }
+            }}
+            >
                 <Grid>
                     <Col size={15}>
                         <View style={{ height: '100%', alignItems: 'center', alignSelf: 'center', alignContent: 'center' }}>
@@ -53,30 +65,6 @@ export default class DrinkBoughtComponent extends Component {
                         </View>
                     </Col>
                 </Grid>
-                <Dialog
-                    visible={
-                        this.state.show
-                    }
-                    onTouchOutside={() => {
-                        this.setState({
-                            show: false
-                        })
-                    }}
-                    dialogAnimation={new SlideAnimation({
-                        slideFrom: 'bottom',
-                    })}
-                    height={400}
-                >
-                    <DialogContent style={styles.dialogStyle}>
-                        <QRCode
-                            value={this.props.drink_id}
-                            size={350}
-                            bgColor='Black'
-                            fgColor='white' />
-
-                    </DialogContent>
-                </Dialog>
-
             </TouchableOpacity>
 
         );
@@ -119,9 +107,10 @@ const styles = StyleSheet.create({
         height: '80%',
         textAlignVertical: 'center',
         textAlign: 'center'
-    }, 
-    dialogStyle :{
+    },
+    dialogStyle: {
         marginTop: '5%',
-        alignContent :'center',
+        alignContent: 'center',
     }
 });
+export default withNavigation(DrinkBoughtComponent)

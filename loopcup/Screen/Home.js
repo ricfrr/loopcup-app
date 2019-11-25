@@ -6,6 +6,10 @@ import DrinkComponent from "../components/DrinkComponent";
 import DrinkBoughtComponent from "../components/DrinkBoughtComponent"
 import { Grid, Row, Content, Spinner } from "native-base";
 import AsyncStorage from '@react-native-community/async-storage';
+import NfcManager, { NfcEvents, NfcAdapter } from 'react-native-nfc-manager'
+import { ToastAndroid } from 'react-native';
+
+
 
 
 export default class Home extends Component {
@@ -25,7 +29,36 @@ export default class Home extends Component {
   }
 
 
+  async pairCup(cup_id) {
+
+    var url = this.state.base_url + 'profile/pair';
+    var id = await AsyncStorage.getItem('id');
+    console.log(url)
+    console.log(this.state.drink_id)
+    await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ profile_id: id, cup_id: cup_id})
+    }).then(async response => {
+      if (response.status === 200) {
+        this.setState({ isLoading: true })
+        await this.getUserInfo()
+        ToastAndroid.show('Cup paired successfully', ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show('Problem while pairing the cup', ToastAndroid.SHORT);
+      }
+    });
+  }
+
   componentDidMount() {
+    NfcManager.start();
+    NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
+      console.log(tag.id.toLowerCase());
+      this.pairCup(tag.id.toLowerCase())
+    });
 
     this.getUserInfo()
     this.getMenu()
@@ -97,6 +130,24 @@ export default class Home extends Component {
   }
 
   render() {
+    //  Pairing the cup with the rfid 
+   NfcManager.registerTagEvent(
+          tag => {
+            console.log(tag.id.toLowerCase());
+          
+          },
+          'Hold your device over the tag',
+          {
+            invalidateAfterFirstRead: true,
+            isReaderModeEnabled: true,
+            readerModeFlags:
+              NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
+          },
+        ); 
+
+
+
+
     var home = [];
     // spinner for while is fetching data
     if (this.state.isLoading) {
@@ -116,13 +167,13 @@ export default class Home extends Component {
         )
       } else {
         for (var i = 0; i < this.state.drinks.length; i++) {
-          user_drinks.push(<DrinkBoughtComponent key={i} loop_coins={this.state.loop_coins} drink_name={this.state.drinks[i]["message"]} drink_id={this.state.drinks[i]["coupon_id"]} drink_cost={this.state.drinks[i]["cost"]} drink_image={this.state.base_url + this.state.drinks[i]["image"]} drink_descr={this.state.drinks[i]["description"]} />)
+          user_drinks.push(<DrinkBoughtComponent key={i} loop_coins={this.state.loop_coins} cup_paired={this.state.cup_paired} drink_name={this.state.drinks[i]["message"]} drink_id={this.state.drinks[i]["coupon_id"]} drink_cost={this.state.drinks[i]["cost"]} drink_image={this.state.base_url + this.state.drinks[i]["image"]} drink_descr={this.state.drinks[i]["description"]} />)
         }
       }
 
       var menu = []
       for (var i = 0; i < this.state.menu.length; i++) {
-        menu.push(<DrinkComponent key={i} loop_coins={this.state.loop_coins} drink_name={this.state.menu[i]["message"]} drink_id={this.state.menu[i]["coupon_id"]} drink_cost={this.state.menu[i]["cost"]} drink_image={this.state.base_url + this.state.menu[i]["image"]} drink_descr={this.state.menu[i]["description"]} />)
+        menu.push(<DrinkComponent key={i} loop_coins={this.state.loop_coins} cup_paired={this.state.cup_paired} drink_name={this.state.menu[i]["message"]} drink_id={this.state.menu[i]["coupon_id"]} drink_cost={this.state.menu[i]["cost"]} drink_image={this.state.base_url + this.state.menu[i]["image"]} drink_descr={this.state.menu[i]["description"]} />)
       }
 
 
@@ -197,10 +248,10 @@ const styles = StyleSheet.create({
   no_drink_user_text: {
     color: "rgba(255,255,255,1)",
     fontSize: 25,
-    height: '40%',
-    textAlignVertical: 'center',
+    height: '100%',
     width: '100%',
     marginLeft: 10,
+    marginTop: '1%',
     fontFamily: "roboto-regular"
   },
   scrollAreaStack: {

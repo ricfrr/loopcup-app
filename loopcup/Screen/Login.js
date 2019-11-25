@@ -25,7 +25,7 @@ class Login extends Component {
 
         </Row>
         
-        <Row size={40}>
+        <Row size={30}>
           <View style={{ width: '100%', alignItems: 'center' }}>
           <FBLoginButton/>
           </View>
@@ -40,7 +40,8 @@ class Login extends Component {
 const styles = StyleSheet.create({
 
   image_container: {
-    height: '80%',
+    marginTop:'20%',
+    height: '100%',
     width: '100%',
     alignItems: 'center',
     alignContent: 'center'

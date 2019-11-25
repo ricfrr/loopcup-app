@@ -5824,6 +5824,11 @@ react-native-keyboard-aware-scroll-view@0.9.1:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
+react-native-nfc-manager@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-nfc-manager/-/react-native-nfc-manager-2.0.1.tgz#80c9e92528c4dddddd80095778d6e8043310a970"
+  integrity sha512-euRHxeytCBVslJxykDxs05T/tl4rI9b97Vgp/tVRjLaF0YvFvEPZ+cSb5jX6ev2I85NNu+fwanhCisDykm7RgA==
+
 react-native-paper@^3.2.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-3.2.1.tgz#8b3f4b8ce36ca471aba3fa7407194afe8595cd35"
