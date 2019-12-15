@@ -21,7 +21,7 @@ class Home extends Component {
       drinks: 0,
       id: 0,
       menu: [],
-      base_url: 'http://192.168.1.4:5000/',
+      base_url: 'http://40.68.90.134/',//'http://192.168.1.4:5000/',
       count: 0
     }
   }

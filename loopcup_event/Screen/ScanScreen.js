@@ -15,7 +15,7 @@ class ScanScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            base_url: 'http://10.100.13.83:5000/',
+            base_url: 'http://40.68.90.134/',// 'http://10.100.13.83:5000/',
         }
     };
 

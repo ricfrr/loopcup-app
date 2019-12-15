@@ -10,7 +10,7 @@ class DrinkDescription extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            base_url: 'http://192.168.1.4:5000/',
+            base_url: 'http://40.68.90.134/',//'http://192.168.1.4:5000/',
             drink_id: this.props.navigation.getParam('drink_id')
         }
     }
